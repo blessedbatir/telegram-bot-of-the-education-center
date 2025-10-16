@@ -1,8 +1,18 @@
 """Конфигурация бота."""
-from dotenv import dotenv_values
+import os
+from dotenv import load_dotenv
 
-config = dotenv_values('./config/.env')
+# Загружаем .env файл если он есть (для локальной разработки)
+load_dotenv('./config/.env')
 
-API_TOKEN = config['TOKEN']
-SQLALCHEMY_URL = config['SQLALCHEMY_URL']
-ADMIN_ID = int(config.get("ADMIN_ID", "0"))
+# Читаем из переменных окружения системы
+API_TOKEN = os.getenv('TOKEN')
+SQLALCHEMY_URL = os.getenv('SQLALCHEMY_URL')
+ADMIN_ID = int(os.getenv('ADMIN_ID', '0'))
+
+# Проверка обязательных переменных
+if not API_TOKEN:
+    raise ValueError("❌ TOKEN не найден! Добавьте переменную окружения TOKEN")
+
+if not SQLALCHEMY_URL:
+    raise ValueError("❌ SQLALCHEMY_URL не найден! Добавьте переменную окружения SQLALCHEMY_URL")
